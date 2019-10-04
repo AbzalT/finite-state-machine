@@ -55,27 +55,15 @@ class FSM {
      * @returns {Array}
      */
     getStates(event) {
-        if(!event) {           
-            return Object.keys(this.currentConfig.states);
-        }       
-        const st = [];               
-        const st1 = Object.entries(this.currentConfig.states).map(([state, value]) => {
-            Object.entries(value.transitions).map(([transitions, value]) => {
-                if(event == transitions) {
-                    st.push(state);
-                }
-                // return (event == transitions) ? state : [];
-            })            
-        });
-        // const bb = [...Object.entries(this.currentConfig.states)].transitions;
-         var states = {}; 
-         states = this.currentConfig.states;
-        // const zz = states.filter(value => value);
-         console.log(states) 
-        // console.log(aa);
-        // console.log(event);
-        // console.log(st1);       
-        return st;
+        const states = this.currentConfig.states;
+        return (event) ?
+        (
+            Object.entries(states).reduce((stack, [state, value]) => {
+            value.transitions[event] ? stack.push(state) : false;
+            return stack;          
+        },[])
+        ) :
+        Object.keys(this.currentConfig.states);        
     }
 
     /**
